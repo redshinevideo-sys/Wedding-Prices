@@ -1,0 +1,370 @@
+{
+  "version": 1,
+  "currency": "LKR",
+  "updated": "2026-09-26",
+  "prices": {
+    "photography": [
+      {
+        "id": "photo1_6h",
+        "name": "1 Photographer • Up to 6 Hours",
+        "price": 25000,
+        "icon": "📸",
+        "meta": "One photographer • up to 6 hours."
+      },
+      {
+        "id": "photo1_full",
+        "name": "1 Photographer • Full Day",
+        "price": 30000,
+        "icon": "📸",
+        "meta": "One photographer • full wedding-day coverage."
+      },
+      {
+        "id": "photo2_6h",
+        "name": "2 Photographers • Up to 6 Hours",
+        "price": 45000,
+        "icon": "👥",
+        "meta": "Two photographers • up to 6 hours."
+      },
+      {
+        "id": "photo2_full",
+        "name": "2 Photographers • Full Day",
+        "price": 55000,
+        "icon": "👥",
+        "meta": "Two photographers • full wedding-day coverage."
+      },
+      {
+        "id": "couple",
+        "name": "Couple Creative Session",
+        "price": 15000,
+        "icon": "💍",
+        "meta": "Directed couple portraits and creative moments."
+      },
+      {
+        "id": "bridal",
+        "name": "Bridal Preparation",
+        "price": 12000,
+        "icon": "👰",
+        "meta": "Bride prep, details and candid moments."
+      },
+      {
+        "id": "groom",
+        "name": "Groom Preparation",
+        "price": 12000,
+        "icon": "🤵",
+        "meta": "Groom prep and detail coverage."
+      },
+      {
+        "id": "candid",
+        "name": "Candid Guest Coverage",
+        "price": 18000,
+        "icon": "✨",
+        "meta": "Guest reactions, family and reception candids."
+      }
+    ],
+    "videography": [
+      {
+        "id": "cine1_6h",
+        "name": "1 Cinematographer • Up to 6 Hours",
+        "price": 25000,
+        "icon": "🎥",
+        "meta": "One cinematographer • up to 6 hours."
+      },
+      {
+        "id": "cine1_full",
+        "name": "1 Cinematographer • Full Day",
+        "price": 30000,
+        "icon": "🎥",
+        "meta": "One cinematographer • full wedding-day coverage."
+      },
+      {
+        "id": "cine2_6h",
+        "name": "2 Cinematographers • Up to 6 Hours",
+        "price": 45000,
+        "icon": "🎬",
+        "meta": "Two cinematographers • up to 6 hours."
+      },
+      {
+        "id": "cine2_full",
+        "name": "2 Cinematographers • Full Day",
+        "price": 55000,
+        "icon": "🎬",
+        "meta": "Two cinematographers • full wedding-day coverage."
+      },
+      {
+        "id": "eventVideo",
+        "name": "Full Ceremony / Event Video",
+        "price": 30000,
+        "icon": "📹",
+        "meta": "Complete ceremony and event coverage."
+      },
+      {
+        "id": "highlight",
+        "name": "5–7 Min Cinematic Highlight Film",
+        "price": 35000,
+        "icon": "🎞️",
+        "meta": "Story-driven highlight film."
+      },
+      {
+        "id": "cinematic",
+        "name": "8–10 Min Cinematic Wedding Film",
+        "price": 55000,
+        "icon": "🎬",
+        "meta": "Premium cinematic storytelling."
+      },
+      {
+        "id": "feature",
+        "name": "10–12 Min Feature Wedding Film",
+        "price": 75000,
+        "icon": "🍿",
+        "meta": "Long-form feature-style wedding story."
+      },
+      {
+        "id": "preshot",
+        "name": "Pre-Shoot Photo + Video",
+        "price": 45000,
+        "icon": "🌅",
+        "meta": "Pre-wedding photo and video session."
+      }
+    ],
+    "special": [
+      {
+        "id": "drone",
+        "name": "Drone Aerial Coverage",
+        "price": 25000,
+        "icon": "🚁",
+        "meta": "Aerial establishing shots, subject to location/weather rules."
+      },
+      {
+        "id": "teaser",
+        "name": "Same-Day 60 Sec Wedding Teaser",
+        "price": 25000,
+        "icon": "📱",
+        "meta": "Short vertical teaser for wedding-night sharing."
+      },
+      {
+        "id": "creator",
+        "name": "Wedding Content Creator",
+        "price": 35000,
+        "icon": "📲",
+        "meta": "Social-first behind-the-scenes and vertical content."
+      },
+      {
+        "id": "reels",
+        "name": "3 Social Media Reels",
+        "price": 15000,
+        "icon": "▶️",
+        "meta": "Three edited vertical reels."
+      }
+    ],
+    "albums": [
+      {
+        "id": "album",
+        "name": "12×24 Premium Album",
+        "price": 45000,
+        "icon": "📖",
+        "meta": "Premium wedding album."
+      },
+      {
+        "id": "album40",
+        "name": "12×24 / 40-Page Premium Album",
+        "price": 65000,
+        "icon": "📚",
+        "meta": "Large premium album with expanded page count."
+      },
+      {
+        "id": "parent",
+        "name": "Parent Mini Album",
+        "price": 20000,
+        "icon": "👪",
+        "meta": "One parent mini album."
+      },
+      {
+        "id": "frame16",
+        "name": "16×24 Premium Frame",
+        "price": 8500,
+        "icon": "🖼️",
+        "meta": "Premium wall frame."
+      },
+      {
+        "id": "frame20",
+        "name": "20×30 Premium Frame",
+        "price": 15000,
+        "icon": "🖼️",
+        "meta": "Larger premium wall frame."
+      },
+      {
+        "id": "memory",
+        "name": "Redshine Memory Box",
+        "price": 25000,
+        "icon": "🎁",
+        "meta": "Curated keepsake box for your wedding memories."
+      }
+    ]
+  },
+  "si": {
+    "photo1_6h": [
+      "ඡායාරූප ශිල්පියා 1 දෙනෙක් • පැය 6 දක්වා",
+      "එක් ඡායාරූප ශිල්පියෙකු • පැය 6 දක්වා ආවරණය."
+    ],
+    "photo1_full": [
+      "ඡායාරූප ශිල්පියා 1 දෙනෙක් • සම්පූර්ණ දවස",
+      "එක් ඡායාරූප ශිල්පියෙකු • මුළු මංගල දිනයම ආවරණය."
+    ],
+    "photo2_6h": [
+      "ඡායාරූප ශිල්පීන් 2 දෙනෙක් • පැය 6 දක්වා",
+      "ඡායාරූප ශිල්පීන් දෙදෙනෙක් • පැය 6 දක්වා ආවරණය."
+    ],
+    "photo2_full": [
+      "ඡායාරූප ශිල්පීන් 2 දෙනෙක් • සම්පූර්ණ දවස",
+      "ඡායාරූප ශිල්පීන් දෙදෙනෙක් • මුළු මංගල දිනයම ආවරණය."
+    ],
+    "couple": [
+      "යුවළ Creative Session",
+      "යුවළගේ directed portraits සහ creative moments."
+    ],
+    "bridal": [
+      "මනාලිය සූදානම් වීම",
+      "මනාලියගේ preparation, details සහ candid moments."
+    ],
+    "groom": [
+      "මනාලයා සූදානම් වීම",
+      "මනාලයාගේ preparation සහ detail coverage."
+    ],
+    "candid": [
+      "අමුත්තන්ගේ Candid Coverage",
+      "අමුත්තන්, පවුලේ අය සහ reception අවස්ථා."
+    ],
+    "cine1_6h": [
+      "Cinematographer 1 දෙනෙක් • පැය 6 දක්වා",
+      "එක් cinematographer කෙනෙකු • පැය 6 දක්වා ආවරණය."
+    ],
+    "cine1_full": [
+      "Cinematographer 1 දෙනෙක් • සම්පූර්ණ දවස",
+      "එක් cinematographer කෙනෙකු • මුළු මංගල දිනයම ආවරණය."
+    ],
+    "cine2_6h": [
+      "Cinematographers 2 දෙනෙක් • පැය 6 දක්වා",
+      "Cinematographers දෙදෙනෙක් • පැය 6 දක්වා ආවරණය."
+    ],
+    "cine2_full": [
+      "Cinematographers 2 දෙනෙක් • සම්පූර්ණ දවස",
+      "Cinematographers දෙදෙනෙක් • මුළු මංගල දිනයම ආවරණය."
+    ],
+    "eventVideo": [
+      "සම්පූර්ණ උත්සව වීඩියෝව",
+      "Ceremony සහ event එක සම්පූර්ණයෙන් ආවරණය කිරීම."
+    ],
+    "highlight": [
+      "5–7 Min Cinematic Highlight Film",
+      "කතාවක් ලෙස සකස් කරන highlight film එක."
+    ],
+    "cinematic": [
+      "8–10 Min Cinematic Wedding Film",
+      "Premium cinematic wedding storytelling."
+    ],
+    "feature": [
+      "10–12 Min Feature Wedding Film",
+      "දිගු feature-style wedding story එක."
+    ],
+    "preshot": [
+      "Pre-Shoot Photo + Video",
+      "විවාහයට පෙර Photo සහ Video session එක."
+    ],
+    "drone": [
+      "Drone Aerial Coverage",
+      "ස්ථානය සහ කාලගුණය අනුව aerial shots."
+    ],
+    "teaser": [
+      "Wedding-Night 60 Sec Teaser",
+      "විවාහ රාත්‍රියේම share කළ හැකි කෙටි teaser එක."
+    ],
+    "creator": [
+      "Wedding Content Creator",
+      "Social media සඳහා behind-the-scenes සහ vertical content."
+    ],
+    "reels": [
+      "Social Media Reels 3ක්",
+      "Vertical reels තුනක්."
+    ],
+    "album": [
+      "12×24 Premium Album",
+      "Premium wedding album එක."
+    ],
+    "album40": [
+      "12×24 / 40-Page Premium Album",
+      "වැඩි pages සහිත premium album එක."
+    ],
+    "parent": [
+      "Parent Mini Album",
+      "මව්පියන් සඳහා mini album එකක්."
+    ],
+    "frame16": [
+      "16×24 Premium Frame",
+      "Premium wall frame එක."
+    ],
+    "frame20": [
+      "20×30 Premium Frame",
+      "විශාල premium wall frame එක."
+    ],
+    "memory": [
+      "Redshine Memory Box",
+      "ඔබේ මංගල මතකයන් සඳහා keepsake box එක."
+    ]
+  },
+  "frames": [
+    {
+      "id": "8x12",
+      "label": "8×12",
+      "price": null,
+      "si": "අඟල් 8×12"
+    },
+    {
+      "id": "12x18",
+      "label": "12×18",
+      "price": null,
+      "si": "අඟල් 12×18"
+    },
+    {
+      "id": "16x24",
+      "label": "16×24",
+      "price": 8500,
+      "si": "අඟල් 16×24"
+    },
+    {
+      "id": "20x30",
+      "label": "20×30",
+      "price": 15000,
+      "si": "අඟල් 20×30"
+    },
+    {
+      "id": "24x36",
+      "label": "24×36",
+      "price": null,
+      "si": "අඟල් 24×36"
+    },
+    {
+      "id": "custom",
+      "label": "Custom Size",
+      "price": null,
+      "si": "ඔබට අවශ්‍ය වෙනත් Size එක"
+    }
+  ],
+  "collections": {
+    "essential": {
+      "name": "Essential",
+      "price": 89000
+    },
+    "signature": {
+      "name": "Signature",
+      "price": 139000
+    },
+    "cinematic": {
+      "name": "Cinematic",
+      "price": 189000
+    },
+    "legacy": {
+      "name": "Legacy",
+      "price": 289000
+    }
+  }
+}

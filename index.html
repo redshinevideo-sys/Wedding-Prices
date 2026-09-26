@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#090b10" />
+<meta name="description" content="Studio Redshine Wedding Package Builder — Build Your Day. Your Way." />
+<title>Studio Redshine — Wedding Package Builder</title>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700;800;900&display=swap");
+  :root{
+    --bg:#090b10;
+    --bg2:#0e1118;
+    --panel:#11151d;
+    --panel2:#151a23;
+    --line:#252c38;
+    --text:#f7f7f5;
+    --muted:#9da6b4;
+    --red:#ef233c;
+    --red2:#ff4a5f;
+    --gold:#d9b46c;
+    --green:#43d18b;
+    --shadow:0 20px 70px rgba(0,0,0,.35);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:
+      radial-gradient(900px 450px at 50% -120px, rgba(239,35,60,.14), transparent 68%),
+      radial-gradient(700px 350px at 90% 10%, rgba(217,180,108,.08), transparent 65%),
+      var(--bg);
+    color:var(--text);
+    font-family:Inter,"Noto Sans Sinhala",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    min-height:100vh;
+  }
+  button,input,textarea{font:inherit}
+  button{cursor:pointer;color:inherit}
+  .option,.choice{color:var(--text)}
+  .option .option-name,.option .option-meta,.choice strong,.choice span{color:inherit}
+  .option .option-meta{color:var(--muted)}
+  .choice span{color:var(--gold)}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 18px}
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(9,11,16,.84);backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .topbar-inner{height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand-mark{
+    width:40px;height:40px;border-radius:12px;
+    display:grid;place-items:center;font-weight:900;
+    background:linear-gradient(145deg,var(--red),#8d1223);
+    box-shadow:0 0 30px rgba(239,35,60,.25)
+  }
+  .brand-title{font-weight:900;letter-spacing:.05em}
+  .brand-sub{display:block;font-size:10px;color:var(--muted);letter-spacing:.16em;margin-top:2px}
+  .date-pill{
+    display:none;border:1px solid rgba(217,180,108,.25);color:var(--gold);
+    padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;
+  }
+
+  .hero{padding:54px 0 32px}
+  .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:26px;align-items:stretch}
+  .hero-copy{
+    padding:26px 0 10px;
+  }
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--gold);font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+  .eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
+  h1{font-family:"Noto Sans Sinhala",Inter,sans-serif;font-size:clamp(42px,6vw,78px);line-height:.94;margin:18px 0 16px;letter-spacing:-.05em;max-width:780px}
+  .accent{color:var(--red)}
+  .hero-copy p{max-width:680px;color:#c6ccd5;font-size:16px;line-height:1.7}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+  .btn{
+    border:0;border-radius:13px;padding:13px 17px;font-weight:800;transition:.2s;
+    display:inline-flex;align-items:center;justify-content:center;gap:9px
+  }
+  .btn-primary{background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;box-shadow:0 12px 30px rgba(239,35,60,.22)}
+  .btn-primary:hover{transform:translateY(-1px);filter:brightness(1.06)}
+  .btn-dark{background:var(--panel2);border:1px solid var(--line);color:#fff}
+  .btn-dark:hover{background:#1b212c}
+  .btn-gold{background:rgba(217,180,108,.12);border:1px solid rgba(217,180,108,.3);color:var(--gold)}
+  .btn-danger{background:rgba(239,35,60,.09);border:1px solid rgba(239,35,60,.28);color:#ff8a98}
+
+  .hero-card{
+    min-height:300px;border:1px solid rgba(255,255,255,.08);border-radius:26px;overflow:hidden;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0)),
+      linear-gradient(135deg,#1a1e27,#0a0d12);
+    box-shadow:var(--shadow);position:relative;
+  }
+  .hero-card::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 72% 24%, rgba(255,255,255,.08), transparent 22%),
+      radial-gradient(circle at 35% 68%, rgba(239,35,60,.14), transparent 28%),
+      linear-gradient(135deg,transparent 42%,rgba(217,180,108,.08) 43%,transparent 44%);
+  }
+  .hero-card-content{position:relative;padding:24px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
+  .hero-card-top{display:flex;justify-content:space-between;gap:12px}
+  .mini-badge{font-size:11px;color:#fff;background:rgba(239,35,60,.16);border:1px solid rgba(239,35,60,.35);padding:7px 9px;border-radius:999px}
+  .hero-photo-text{margin-top:auto}
+  .hero-photo-text strong{display:block;font-size:44px;line-height:1}
+  .hero-photo-text span{color:var(--muted);font-size:13px}
+
+  .steps{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 24px;
+    position:sticky;top:72px;z-index:40;background:linear-gradient(var(--bg),rgba(9,11,16,.96));padding:10px 0 12px
+  }
+  .step{border:1px solid var(--line);background:rgba(17,21,29,.9);border-radius:13px;padding:11px 10px;color:var(--muted);text-align:center;font-size:12px;font-weight:800}
+  .step.active{color:#fff;border-color:rgba(239,35,60,.5);box-shadow:inset 0 0 0 1px rgba(239,35,60,.12)}
+  .step.done{color:var(--green);border-color:rgba(67,209,139,.25)}
+
+  .builder{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,.72fr);gap:22px;align-items:start}
+  .main-col{min-width:0}
+  .summary-col{position:sticky;top:130px}
+  .section{
+    border:1px solid var(--line);background:rgba(17,21,29,.92);border-radius:var(--radius);
+    margin-bottom:18px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.16)
+  }
+  .section-head{padding:18px 18px 12px;display:flex;justify-content:space-between;gap:16px}
+  .section-title{font-size:18px;font-weight:900}
+  .section-desc{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .section-body{padding:0 18px 18px}
+  .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .option{
+    position:relative;border:1px solid var(--line);background:#0f131a;border-radius:15px;
+    padding:15px;transition:.18s;cursor:pointer
+  }
+  .option:hover{border-color:#384252;transform:translateY(-1px)}
+  .option.selected{border-color:rgba(239,35,60,.7);background:linear-gradient(180deg,rgba(239,35,60,.10),rgba(15,19,26,.95));box-shadow:inset 0 0 0 1px rgba(239,35,60,.18)}
+  .option.disabled{opacity:.5;cursor:not-allowed}
+  .option-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .icon{
+    width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+    background:#191f28;border:1px solid var(--line);font-size:18px;flex:0 0 auto
+  }
+  .option.selected .icon{background:rgba(239,35,60,.15);border-color:rgba(239,35,60,.35)}
+  .check{width:22px;height:22px;border-radius:7px;border:1px solid #3b4554;display:grid;place-items:center;font-size:12px;color:transparent}
+  .option.selected .check{background:var(--red);border-color:var(--red);color:#fff}
+  .option-name{font-weight:850;margin-top:10px}
+  .option-meta{margin-top:4px;color:var(--muted);font-size:12px;line-height:1.5}
+  .price{margin-top:11px;font-weight:900;color:var(--gold)}
+  .note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.45}
+  .choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .choice{
+    border:1px solid var(--line);background:#0f131a;border-radius:14px;padding:13px;cursor:pointer;
+  }
+  .choice.active{border-color:rgba(239,35,60,.65);background:rgba(239,35,60,.08)}
+  .choice strong{display:block;font-size:14px}
+  .choice span{display:block;color:var(--gold);font-size:12px;margin-top:6px;font-weight:800}
+
+  .summary-card{
+    border:1px solid rgba(239,35,60,.28);background:
+      radial-gradient(300px 160px at 100% 0,rgba(239,35,60,.11),transparent 70%),
+      #10141b;
+    border-radius:22px;overflow:hidden;box-shadow:var(--shadow)
+  }
+  .summary-head{padding:18px;border-bottom:1px solid var(--line)}
+  .summary-title{font-weight:900;font-size:18px}
+  .summary-sub{font-size:11px;color:var(--muted);margin-top:4px}
+  .summary-list{max-height:340px;overflow:auto;padding:10px 18px}
+  .sum-row{display:flex;gap:10px;justify-content:space-between;padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.06);font-size:12px}
+  .sum-row:last-child{border-bottom:0}
+  .sum-row span:first-child{color:#d9dee7}
+  .sum-row span:last-child{color:var(--gold);font-weight:800;white-space:nowrap}
+  .sum-total{padding:16px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end}
+  .sum-total span{font-size:12px;color:var(--muted)}
+  .sum-total strong{font-size:28px;line-height:1;color:#fff}
+  .summary-actions{padding:0 18px 18px;display:grid;gap:9px}
+  .mini-info{margin:0 18px 16px;padding:11px 12px;border-radius:12px;background:rgba(217,180,108,.08);border:1px solid rgba(217,180,108,.18);font-size:11px;color:#d8cebc;line-height:1.5}
+  .compare{margin:0 18px 16px;padding:12px;border-radius:13px;background:#0d1117;border:1px solid var(--line)}
+  .compare .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+  .compare strong{display:block;margin-top:4px}
+  .compare .delta{margin-top:6px;color:var(--green);font-size:11px;font-weight:800}
+  .compare .delta.neutral{color:var(--muted)}
+
+  .frame-add-row{
+    display:grid;grid-template-columns:minmax(0,1.3fr) 180px auto;gap:10px;align-items:end;
+    padding:14px;border:1px solid var(--line);border-radius:15px;background:#0d1117
+  }
+  .frame-select-wrap,.frame-qty-wrap{display:grid;gap:7px}
+  .frame-select-wrap label,.frame-qty-wrap label{font-size:11px;color:#cfd5df;font-weight:800}
+  select{
+    width:100%;background:#0f141b;color:#fff;border:1px solid var(--line);border-radius:12px;
+    padding:12px 13px;outline:none
+  }
+  select:focus{border-color:rgba(239,35,60,.65);box-shadow:0 0 0 3px rgba(239,35,60,.1)}
+  .qty-control{display:flex;align-items:center;background:#0f141b;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .qty-control button{width:40px;height:44px;border:0;background:#171d27;color:#fff;font-size:20px}
+  .qty-control button:hover{background:#202735}
+  .qty-control input{border:0;border-radius:0;text-align:center;background:transparent;height:44px;padding:0}
+  .frame-add-btn{height:44px;white-space:nowrap}
+  .frame-note{margin:11px 2px 0;color:#919ba8;font-size:11px;line-height:1.5}
+  .frame-cart{display:grid;gap:9px;margin-top:12px}
+  .frame-line{
+    display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;
+    padding:12px 13px;border:1px solid var(--line);background:#0f131a;border-radius:13px
+  }
+  .frame-line-main strong{display:block;font-size:13px}
+  .frame-line-main span{display:block;font-family:'Noto Sans Sinhala',Inter,sans-serif;color:#9ca6b3;font-size:11px;margin-top:3px}
+  .frame-line-price{font-weight:900;color:var(--gold);white-space:nowrap;font-size:12px}
+  .frame-line-qty{display:flex;align-items:center;gap:7px}
+  .frame-line-qty button{width:28px;height:28px;border:1px solid var(--line);border-radius:8px;background:#171d27;color:#fff}
+  .frame-remove{border:0;background:transparent;color:#ff7c8b;font-size:18px}
+  .quote-only{color:#f0bb63;font-size:11px;font-weight:800;white-space:nowrap}
+  .frame-summary-note{margin-top:9px;padding:10px 11px;border-radius:11px;background:rgba(217,180,108,.07);border:1px solid rgba(217,180,108,.15);color:#d8cfbf;font-size:11px;line-height:1.5}
+
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:grid;gap:7px}
+  .field.full{grid-column:1/-1}
+  label{font-size:12px;color:#d2d7df;font-weight:800}
+  input,textarea{
+    width:100%;background:#0d1117;color:#fff;border:1px solid var(--line);border-radius:12px;
+    padding:12px 13px;outline:none
+  }
+  input:focus,textarea:focus{border-color:rgba(239,35,60,.65);box-shadow:0 0 0 3px rgba(239,35,60,.1)}
+  textarea{min-height:100px;resize:vertical}
+
+  .selection-alert{
+    display:none;margin-top:12px;padding:11px 12px;border-radius:12px;font-size:11px;
+    background:rgba(239,35,60,.08);border:1px solid rgba(239,35,60,.28);color:#ffc8cf
+  }
+  .selection-alert.show{display:block}
+  .footer-note{padding:28px 0 110px;color:#7f8997;font-size:11px;line-height:1.7}
+  .footer-note strong{color:#c7cdd6}
+
+  .mobile-total{
+    position:fixed;left:12px;right:12px;bottom:12px;z-index:60;display:none;
+    background:rgba(16,20,27,.94);border:1px solid rgba(239,35,60,.35);backdrop-filter:blur(18px);
+    border-radius:16px;padding:10px 12px;box-shadow:0 18px 45px rgba(0,0,0,.4)
+  }
+  .mobile-total-inner{display:flex;align-items:center;gap:10px}
+  .mobile-total-copy{flex:1}
+  .mobile-total-copy small{display:block;color:var(--muted);font-size:10px}
+  .mobile-total-copy strong{display:block;font-size:18px}
+  .mobile-total .btn{padding:11px 12px}
+
+  .toast{
+    position:fixed;right:18px;bottom:18px;z-index:100;min-width:260px;max-width:360px;
+    background:#121721;border:1px solid #303a49;color:#fff;padding:13px 14px;border-radius:14px;
+    box-shadow:var(--shadow);display:none
+  }
+  .toast.show{display:block;animation:toastIn .2s ease}
+  @keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .modal{
+    position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.68);backdrop-filter:blur(8px);
+    display:none;align-items:center;justify-content:center;padding:16px
+  }
+  .modal.show{display:flex}
+  .modal-card{width:min(760px,100%);max-height:90vh;overflow:auto;background:#11151d;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+  .modal-head{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .modal-body{padding:18px}
+  .close{background:none;border:0;color:#b6bfcb;font-size:24px}
+  .modal-quote{background:#0c1016;border:1px solid var(--line);border-radius:14px;padding:14px;white-space:pre-wrap;font-size:12px;line-height:1.6;color:#dce1e7}
+
+  @media (max-width:980px){
+    .hero-grid{grid-template-columns:1fr}
+    .hero-card{min-height:220px}
+    .builder{grid-template-columns:1fr}
+    .summary-col{position:static}
+    .summary-card{position:sticky;top:130px}
+  }
+  @media (max-width:700px){
+    .topbar-inner{height:64px}
+    .brand-title{font-size:13px}
+    .date-pill{display:block}
+    .hero{padding:34px 0 18px}
+    h1{font-size:48px}
+    .hero-copy p{font-size:14px}
+    .steps{top:64px;grid-template-columns:repeat(4,1fr);gap:6px}
+    .step{font-size:10px;padding:9px 5px}
+    .cards{grid-template-columns:1fr}
+    .choice-grid{grid-template-columns:1fr 1fr 1fr}
+    .summary-card{position:static}
+    .mobile-total{display:block}
+    .summary-actions{padding-bottom:22px}
+    .footer-note{padding-bottom:150px}
+  }
+  @media (max-width:520px){
+    .wrap{padding:0 12px}
+    .hero-card{display:none}
+    h1{font-size:42px}
+    .hero-cta .btn{width:100%}
+    .form-grid{grid-template-columns:1fr}
+    .field.full{grid-column:auto}
+    .choice-grid{grid-template-columns:1fr}
+    .section-head{padding:15px 14px 10px}
+    .section-body{padding:0 14px 14px}
+    .summary-list{max-height:260px}
+  }
+
+  @media print{
+    body{background:#fff;color:#111}
+    .topbar,.hero,.steps,.summary-actions,.mobile-total,.footer-note,.btn,.section:not(#summaryPrint),.main-col{display:none!important}
+    .summary-card{display:block!important;position:static!important;box-shadow:none;border:1px solid #ddd;background:#fff;color:#111}
+    .summary-head,.sum-total{border-color:#ddd}
+    .sum-row span:first-child,.sum-total span,.summary-sub{color:#444}
+    .sum-row span:last-child,.sum-total strong{color:#111}
+    .compare,.mini-info{background:#fff;border-color:#ddd;color:#222}
+    .summary-col{display:block!important}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">R</div>
+      <div>
+        <div class="brand-title">STUDIO REDSHINE</div>
+        <span class="brand-sub">PHOTO • VIDEO • PRINTING • FRAMES</span>
+      </div>
+    </div>
+    <div class="date-pill">2026 WEDDING DATES OPEN</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">Wedding Collection 2026 • 2026 මංගල එකතුව</div>
+        <h1>More Than a <span class="accent">Photo.</span><br><small style="font-size:.42em;letter-spacing:0;color:#d9dee7">ඡායාරූපයකට වඩා වැඩි මතකයක්.</small></h1>
+        <p>Build a wedding package around what matters to you. Choose the photography, cinematography, drone, social content, albums and frames you actually want — and see your estimated total update instantly.<br><span style="color:#bfc7d3">ඔබට අවශ්‍ය සේවා පමණක් තෝරාගෙන, ඔබේම මංගල පැකේජ් එක හදාගෙන, මුළු වටිනාකම වහාම බලන්න.</span></p>
+        <div class="hero-cta">
+          <button class="btn btn-primary" onclick="document.getElementById('builder').scrollIntoView({behavior:'smooth'})">✦ Start Building • දැන් හදමු</button>
+          <button class="btn btn-dark" onclick="applyPreset('signature')">★ Popular Setup • ජනප්‍රිය පැකේජයක් බලන්න</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-content">
+          <div class="hero-card-top">
+            <span class="mini-badge">BUILD YOUR DAY. YOUR WAY. • ඔබේ දවස, ඔබේ විදිහට.</span>
+            <span style="color:var(--gold);font-size:12px;font-weight:800">2026</span>
+          </div>
+          <div class="hero-photo-text">
+            <strong>YOUR<br><span style="color:var(--red)">STORY.</span><small style="display:block;color:#d9dee7;font-size:11px;margin-top:8px">ඔබේ කතාව.</small></strong>
+            <span>Photography • Cinematography • මතක පරම්පරා ගණනක් රැකෙන ලෙස.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="steps" id="steps">
+    <div class="step active" data-step="1">01 · SERVICES • සේවා</div>
+    <div class="step" data-step="2">02 · ADD-ONS • අමතර සේවා</div>
+    <div class="step" data-step="3">03 · REVIEW • සමාලෝචනය</div>
+    <div class="step" data-step="4">04 · SEND • යවන්න</div>
+  </div>
+
+  <section class="builder" id="builder">
+    <div class="main-col">
+      <section class="section" id="services-section">
+        <div class="section-head">
+          <div>
+            <div class="section-title">📸 Photography • ඡායාරූප සේවා</div>
+            <div class="section-desc">Choose your photographer count + coverage duration in one option. No double-charging.<br><span style="color:#c0c7d0;font-family:'Noto Sans Sinhala',Inter,sans-serif">Photographer ගණන සහ coverage duration එක එකටම තෝරන්න. එකම සේවාව දෙවරක් charge නොවේ.</span></div>
+          </div>
+          <button class="btn btn-dark" style="padding:8px 10px;font-size:11px" onclick="clearCategory('photography')">Clear • ඉවත් කරන්න</button>
+        </div>
+        <div class="section-body">
+          <div class="cards" id="photographyCards"></div>
+          <div class="selection-alert" id="photoAlert"></div>
+        </div>
+      </section>
+
+      <section class="section" id="video-section">
+        <div class="section-head">
+          <div>
+            <div class="section-title">🎬 Videography • වීඩියෝ සේවා</div>
+            <div class="section-desc">Choose your cinematographer count + coverage duration in one option.<br><span style="color:#c0c7d0;font-family:'Noto Sans Sinhala',Inter,sans-serif">Cinematographer ගණන සහ coverage duration එක එකටම තෝරන්න.</span></div>
+          </div>
+          <button class="btn btn-dark" style="padding:8px 10px;font-size:11px" onclick="clearCategory('videography')">Clear • ඉවත් කරන්න</button>
+        </div>
+        <div class="section-body">
+          <div class="cards" id="videographyCards"></div>
+          <div class="selection-alert" id="videoAlert"></div>
+        </div>
+      </section>
+
+      <section class="section" id="special-section">
+        <div class="section-head">
+          <div>
+            <div class="section-title">🚁 Special • විශේෂ සේවා</div>
+            <div class="section-desc">The details that make the final delivery feel more premium and social-ready.<br><span style="color:#7f8997">ඔබේ final delivery එක තවත් premium කරගන්න විශේෂ සේවා.</span></div>
+          </div>
+          <button class="btn btn-dark" style="padding:8px 10px;font-size:11px" onclick="clearCategory('special')">Clear • ඉවත් කරන්න</button>
+        </div>
+        <div class="section-body">
+          <div class="cards" id="specialCards"></div>
+        </div>
+      </section>
+
+      <section class="section" id="album-section">
+        <div class="section-head">
+          <div>
+            <div class="section-title">🖼️ Albums & Prints • ඇල්බම් සහ ෆ්‍රේම්</div>
+            <div class="section-desc">Turn the digital memories into something you can hold and display.<br><span style="color:#7f8997">Digital මතකයන් අතට ගන්න පුළුවන් ලස්සන නිර්මාණ බවට පත්කරන්න.</span></div>
+          </div>
+          <button class="btn btn-dark" style="padding:8px 10px;font-size:11px" onclick="clearCategory('albums')">Clear • ඉවත් කරන්න</button>
+        </div>
+        <div class="section-body">
+          <div class="cards" id="albumCards"></div>
+        </div>
+      </section>
+
+      <section class="section" id="frame-section">
+        <div class="section-head">
+          <div>
+            <div class="section-title">🖼️ Frames • ෆ්‍රේම්</div>
+            <div class="section-desc">
+              Add the same size more than once, or mix different sizes in the same package.
+              <br><span style="color:#c0c7d0;font-family:'Noto Sans Sinhala',Inter,sans-serif">එකම Size එක frame 2ක්, 3ක් හෝ වැඩි ගණනක් ගන්නත්, වෙනස් Sizes එකට ගන්නත් පුළුවන්.</span>
+            </div>
+          </div>
+          <button class="btn btn-dark" style="padding:8px 10px;font-size:11px" onclick="clearFrames()">Clear • ඉවත් කරන්න</button>
+        </div>
+        <div class="section-body">
+          <div class="frame-add-row">
+            <div class="frame-select-wrap">
+              <label for="frameSize">Frame Size • ෆ්‍රේම් Size</label>
+              <select id="frameSize"></select>
+            </div>
+            <div class="frame-qty-wrap">
+              <label for="frameQty">Quantity • ප්‍රමාණය</label>
+              <div class="qty-control">
+                <button type="button" onclick="changeFrameQty(-1)" aria-label="Decrease quantity">−</button>
+                <input id="frameQty" type="number" min="1" max="99" value="1" />
+                <button type="button" onclick="changeFrameQty(1)" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button class="btn btn-primary frame-add-btn" onclick="addFrame()">＋ Add Frame • Frame එකතු කරන්න</button>
+          </div>
+          <div class="frame-note" id="frameNote"></div>
+          <div class="frame-cart" id="frameCart"></div>
+        </div>
+      </section>
+
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="section-title">✨ Quick Collections • ඉක්මන් පැකේජ්</div>
+            <div class="section-desc">Use an existing collection as a starting point, then customise it.<br><span style="color:#7f8997">දැනට තියෙන පැකේජ් එකකින් පටන්ගෙන ඔබට කැමති විදිහට වෙනස් කරන්න.</span></div>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="choice-grid" id="presetCards"></div>
+        </div>
+      </section>
+
+      <section class="section" id="reviewSection">
+        <div class="section-head">
+          <div>
+            <div class="section-title">📝 Your Details • ඔබේ විස්තර</div>
+            <div class="section-desc">These details are used only to create your quotation request and WhatsApp message.<br><span style="color:#7f8997">Quote එක සහ WhatsApp පණිවිඩය සෑදීමට පමණයි මේ විස්තර භාවිතා කරන්නේ.</span></div>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="form-grid">
+            <div class="field">
+              <label for="name">Your Name * • නම *</label>
+              <input id="name" placeholder="මනාලයා / මනාලියගේ නම" />
+            </div>
+            <div class="field">
+              <label for="phone">WhatsApp Number * • WhatsApp අංකය *</label>
+              <input id="phone" placeholder="07X XXX XXXX" inputmode="tel" />
+            </div>
+            <div class="field">
+              <label for="date">Wedding Date * • විවාහ දිනය *</label>
+              <input id="date" type="date" />
+            </div>
+            <div class="field">
+              <label for="location">Venue / Location • ස්ථානය</label>
+              <input id="location" placeholder="Colombo / Hotel / Venue • කොළඹ / හෝටලය / ස්ථානය" />
+            </div>
+            <div class="field full">
+              <label for="notes">Notes • සටහන්</label>
+              <textarea id="notes" placeholder="ඔබට විශේෂයෙන් දැනුම් දෙන්න ඕන දෙයක් තිබේද?"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        <strong>වැදගත්:</strong> Prices shown are estimates for package building and are managed by Studio Redshine. Final quotation depends on date, location, coverage hours and availability.<br>පෙන්වන මිල ගණන් package builder එක සඳහා ඇස්තමේන්තු පමණි. අවසන් quotation එක දිනය, ස්ථානය, coverage hours සහ availability අනුව තීරණය වේ.
+        Studio Redshine confirms the final package and booking only after checking your wedding date and requirements.<br>Studio Redshine මගින් ඔබේ දිනය සහ අවශ්‍යතා පරීක්ෂා කිරීමෙන් පසුව අවසන් package එක සහ booking එක තහවුරු කරයි.
+      </div>
+    </div>
+
+    <aside class="summary-col" id="summaryPrint">
+      <div class="summary-card">
+        <div class="summary-head">
+          <div class="summary-title">Your Custom Package • ඔබේම පැකේජ් එක</div>
+          <div class="summary-sub" id="summaryCount">0 items selected</div>
+        </div>
+        <div class="summary-list" id="summaryList"><div id="summaryFrameNote" style="display:none;margin:-2px 0 10px;padding:9px 10px;border-radius:10px;background:rgba(217,180,108,.07);border:1px solid rgba(217,180,108,.16);color:#d8cfbf;font-size:11px">Some frame sizes need price confirmation.</div>
+          <div style="padding:24px 0;color:var(--muted);text-align:center;font-size:12px">
+            Start selecting services to build your package.<br>ඔබට අවශ්‍ය සේවා තෝරන්න.
+          </div>
+        </div>
+
+        <div class="compare" id="compareBox">
+          <div class="label">Closest reference collection • ළඟම ගැළපෙන පැකේජය</div>
+          <strong id="closestName">—</strong>
+          <div class="delta neutral" id="closestDelta">Add items to compare • සැසඳීමට සේවා තෝරන්න.</div>
+        </div>
+
+        <div class="mini-info">
+          💡 Your custom package is an estimate. The final quotation is confirmed by Studio Redshine after checking availability, date, location and exact coverage.
+        </div>
+
+        <div class="sum-total">
+          <div><span>Estimated Total • ඇස්තමේන්තුගත මුළු මුදල</span><div style="margin-top:5px;font-size:11px;color:var(--muted)" id="selectedCount2">0 තේරීම්</div></div>
+          <strong id="total">Rs. 0</strong>
+        </div>
+        <div class="summary-actions">
+          <button class="btn btn-primary" onclick="openQuoteModal()">📲 Build WhatsApp Quotation • WhatsApp Quote හදන්න</button>
+          <button class="btn btn-gold" onclick="sharePackage()">🔗 Share Package • පැකේජ් එක බෙදාගන්න</button>
+          <button class="btn btn-dark" onclick="copyQuotation()">📋 Copy • පිටපත් කරන්න Quotation • Quote එක Copy කරන්න</button>
+          <button class="btn btn-dark" onclick="window.print()">🖨️ Print / Save PDF • PDF Save කරන්න</button>
+          <button class="btn btn-danger" onclick="resetBuilder()">↺ Start Over • නැවත පටන් ගන්න</button>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<div class="mobile-total" id="mobileTotal">
+  <div class="mobile-total-inner">
+    <div class="mobile-total-copy">
+      <small id="mobileCount">0 items</small>
+      <strong id="mobilePrice">Rs. 0</strong>
+    </div>
+    <button class="btn btn-primary" onclick="openQuoteModal()">WhatsApp</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div>
+        <div id="quoteTitle" style="font-weight:900;font-size:18px">Ready to Send • යවන්න සූදානම්</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">Review your quotation before opening WhatsApp. • WhatsApp යැවීමට පෙර quote එක පරීක්ෂා කරන්න.</div>
+      </div>
+      <button class="close" onclick="closeQuoteModal()" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="selection-alert" id="modalAlert"></div>
+      <div class="modal-quote" id="quotePreview"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+        <button class="btn btn-dark" onclick="copyQuotation()">📋 Copy • පිටපත් කරන්න</button>
+        <button class="btn btn-primary" onclick="sendWhatsApp()">💬 Open WhatsApp • WhatsApp විවෘත කරන්න</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let PRICES = {photography:[], videography:[], special:[], albums:[]};
+
+const SI = {};
+
+let COLLECTIONS = {};
+
+let FRAME_SIZES = [];
+
+
+  {id:'8x12', label:'8×12', price:null, si:'අඟල් 8×12'},
+  {id:'12x18', label:'12×18', price:null, si:'අඟල් 12×18'},
+  {id:'16x24', label:'16×24', price:8500, si:'අඟල් 16×24'},
+  {id:'20x30', label:'20×30', price:15000, si:'අඟල් 20×30'},
+  {id:'24x36', label:'24×36', price:null, si:'අඟල් 24×36'},
+  {id:'custom', label:'Custom Size', price:null, si:'ඔබට අවශ්‍ය වෙනත් Size එක'}
+];
