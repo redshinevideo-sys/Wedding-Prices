@@ -1037,7 +1037,7 @@ function buildQuotation(){
   lines.push('Studio Redshine');
   lines.push('Photo • Video • Printing • Frames / ඡායාරූප • වීඩියෝ • මුද්‍රණ • ෆ්‍රේම්');
   lines.push('📞 074 317 17 18');
-  return lines.join('\\n');
+  return lines.join('\n');
 }
 function formatDate(v){
   if(!v)return '—';
@@ -1057,7 +1057,7 @@ function openQuoteModal(){
     return;
   }
   validateRules();
-  const bad=!hasAny(['cine1','cine2']) && hasAny(['highlight','cinematic','feature']);
+  const bad=!hasAny(['cine1_6h','cine1_full','cine2_6h','cine2_full']) && hasAny(['highlight','cinematic','feature']);
   if(bad){
     alert.classList.add('show');alert.innerHTML='Please select <strong>1 or 2 Cinematographers</strong> for the selected cinematic film before sending.<br><span style="font-family:\'Noto Sans Sinhala\',Inter,sans-serif">තෝරාගත් cinematic film එක සඳහා Cinematographer 1 හෝ 2 දෙනෙක් තෝරන්න.</span>';
     document.getElementById('video-section').scrollIntoView({behavior:'smooth'});
@@ -1071,10 +1071,33 @@ function openQuoteModal(){
 function closeQuoteModal(){document.getElementById('quoteModal').classList.remove('show')}
 function sendWhatsApp(){
   const d=getDetails(true);
-  if(!d)return;
+  if(!d){
+    const alert=document.getElementById('modalAlert');
+    if(alert){
+      alert.classList.add('show');
+      alert.innerHTML='Please complete <strong>Name, WhatsApp Number and Wedding Date</strong> before sending.<br><span style=\"font-family:\'Noto Sans Sinhala\',Inter,sans-serif\">යැවීමට පෙර නම, WhatsApp අංකය සහ විවාහ දිනය පුරවන්න.</span>';
+      document.getElementById('reviewSection')?.scrollIntoView({behavior:'smooth'});
+    }
+    return;
+  }
   const text=buildQuotation();
   const url='https://wa.me/94743171718?text='+encodeURIComponent(text);
-  window.open(url,'_blank','noopener');
+  const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  try{
+    if(isMobile){
+      window.location.href=url;
+    }else{
+      const a=document.createElement('a');
+      a.href=url;
+      a.target='_blank';
+      a.rel='noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+  }catch(e){
+    window.location.href=url;
+  }
   setStep(4);
 }
 async function copyQuotation(){
