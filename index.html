@@ -229,6 +229,17 @@
   .selection-alert.show{display:block}
   .footer-note{padding:28px 0 110px;color:#7f8997;font-size:11px;line-height:1.7}
   .footer-note strong{color:#c7cdd6}
+  .contact-strip{
+    margin:18px 0 10px;padding:12px 14px;border:1px solid rgba(217,180,108,.22);
+    background:linear-gradient(135deg,rgba(217,180,108,.08),rgba(239,35,60,.05));
+    border-radius:15px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  }
+  .contact-strip-title{font-size:11px;color:#aeb6c2;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+  .contact-links{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+  .contact-link{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#10151d;
+    border-radius:11px;padding:9px 11px;font-size:12px;font-weight:800;color:#fff}
+  .contact-link:hover{border-color:rgba(239,35,60,.45);transform:translateY(-1px)}
+  .contact-link.fb{border-color:rgba(80,120,255,.28);}
 
   .mobile-total{
     position:fixed;left:12px;right:12px;bottom:12px;z-index:60;display:none;
@@ -280,8 +291,11 @@
     .choice-grid{grid-template-columns:1fr 1fr 1fr}
     .summary-card{position:static}
     .mobile-total{display:block}
-    .summary-actions{padding-bottom:22px}
+    .summary-actions{padding-bottom:120px}
     .footer-note{padding-bottom:150px}
+    .contact-strip{flex-direction:column;align-items:flex-start}
+    .contact-links{width:100%;justify-content:flex-start}
+    .contact-link{flex:1 1 auto;justify-content:center}
   }
   @media (max-width:520px){
     .wrap{padding:0 12px}
@@ -348,6 +362,17 @@
       </div>
     </div>
   </section>
+
+  <div class="contact-strip" aria-label="Studio Redshine contact links">
+    <div>
+      <div class="contact-strip-title">Studio Redshine • Contact / සම්බන්ධ වන්න</div>
+      <div style="font-size:10px;color:#737d8b;margin-top:3px">Wedding enquiries • Booking • Custom quotations</div>
+    </div>
+    <div class="contact-links">
+      <a class="contact-link" href="https://wa.me/94743171718" aria-label="WhatsApp Studio Redshine 074 317 17 18">💬 WhatsApp • 074 317 17 18</a>
+      <a class="contact-link fb" href="https://www.facebook.com/redshinepolonnaruwa/" target="_blank" rel="noopener noreferrer" aria-label="Studio Redshine Facebook page">f Facebook • Studio Redshine</a>
+    </div>
+  </div>
 
   <div class="steps" id="steps">
     <div class="step active" data-step="1">01 · SERVICES • සේවා</div>
@@ -563,7 +588,7 @@
       <div class="modal-quote" id="quotePreview"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
         <button class="btn btn-dark" onclick="copyQuotation()">📋 Copy • පිටපත් කරන්න</button>
-        <button class="btn btn-primary" onclick="sendWhatsApp()">💬 Open WhatsApp • WhatsApp විවෘත කරන්න</button>
+        <a class="btn btn-primary" id="whatsappLink" href="#" target="_self" rel="noopener noreferrer">💬 Open WhatsApp • WhatsApp විවෘත කරන්න</a>
       </div>
     </div>
   </div>
@@ -1064,7 +1089,13 @@ function openQuoteModal(){
     return;
   }
   alert.classList.remove('show');
-  document.getElementById('quotePreview').textContent=buildQuotation();
+  const quotationText=buildQuotation();
+  document.getElementById('quotePreview').textContent=quotationText;
+  const waLink=document.getElementById('whatsappLink');
+  if(waLink){
+    waLink.href='https://wa.me/94743171718?text='+encodeURIComponent(quotationText);
+    waLink.target=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'_self':'_blank';
+  }
   document.getElementById('quoteModal').classList.add('show');
   setStep(3);
 }
@@ -1080,26 +1111,18 @@ function sendWhatsApp(){
     }
     return;
   }
-  const text=buildQuotation();
-  const url='https://wa.me/94743171718?text='+encodeURIComponent(text);
-  const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  try{
-    if(isMobile){
-      window.location.href=url;
-    }else{
-      const a=document.createElement('a');
-      a.href=url;
-      a.target='_blank';
-      a.rel='noopener noreferrer';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
-  }catch(e){
-    window.location.href=url;
+  const link=document.getElementById('whatsappLink');
+  if(link){
+    const text=buildQuotation();
+    link.href='https://wa.me/94743171718?text='+encodeURIComponent(text);
+    link.target=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'_self':'_blank';
+    link.click();
+  }else{
+    window.location.href='https://wa.me/94743171718?text='+encodeURIComponent(buildQuotation());
   }
   setStep(4);
 }
+
 async function copyQuotation(){
   const text=buildQuotation();
   try{
