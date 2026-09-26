@@ -766,7 +766,8 @@ function getPricingSnapshot(){
   return {
     prices: JSON.parse(JSON.stringify(PRICES)),
     frames: JSON.parse(JSON.stringify(FRAME_SIZES)),
-    collections: JSON.parse(JSON.stringify(COLLECTIONS))
+    collections: JSON.parse(JSON.stringify(COLLECTIONS)),
+    translations: JSON.parse(JSON.stringify(SI))
   };
 }
 function savePricingLocal(){
@@ -792,6 +793,11 @@ function loadPricingLocal(){
         if(cfg.collections[k]) COLLECTIONS[k].price=normalizePrice(cfg.collections[k].price) ?? COLLECTIONS[k].price;
       });
     }
+    if(cfg.translations && typeof cfg.translations === 'object'){
+      Object.keys(cfg.translations).forEach(id=>{
+        if(Array.isArray(cfg.translations[id])) SI[id]=cfg.translations[id];
+      });
+    }
   }catch(e){}
 }
 function serviceCategoryLabel(cat){
@@ -804,7 +810,7 @@ function safeJsonDownload(filename, data){
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function exportPricing(){
-  safeJsonDownload('studio-redshine-pricing-config.json',getPricingSnapshot());
+  safeJsonDownload('pricing.json',getPricingSnapshot());
   adminToast('Pricing exported. / Price settings file එක save කළා.');
 }
 function importPricing(event){
@@ -822,6 +828,11 @@ function importPricing(event){
       Object.keys(COLLECTIONS).forEach(k=>{
         if(cfg.collections[k]) COLLECTIONS[k].price=normalizePrice(cfg.collections[k].price) ?? COLLECTIONS[k].price;
       });
+      if(cfg.translations && typeof cfg.translations === 'object'){
+        Object.keys(cfg.translations).forEach(id=>{
+          if(Array.isArray(cfg.translations[id])) SI[id]=cfg.translations[id];
+        });
+      }
       SI_REFRESH_FROM_CONFIG();
       savePricingLocal(); render(); renderAdminPricing();
       adminToast('Pricing imported successfully. / Price settings import කළා.');
@@ -976,8 +987,14 @@ function addService(){
   const price=normalizePrice(document.getElementById('newServicePrice').value);
   if(!en)return adminToast('Enter an English item name. / Item name එක දාන්න.',true);
   const id=(en.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')+'_'+Date.now()).slice(0,70);
-  PRICES[cat].push({id,name:en,price,icon:'✨',meta:'Custom service • Price configured by Studio Redshine.'});
-  SI[id]=[si||en,'Studio Redshine custom item.'];
+  PRICES[cat].push({
+    id,name:en,price,icon:'✨',
+    meta:'Custom service • Price configured by Studio Redshine.'
+  });
+  SI[id]=[
+    si||en,
+    si ? `${si} • Studio Redshine custom service.` : 'Studio Redshine custom service.'
+  ];
   savePricingLocal(); render(); renderAdminPricing();
   adminToast('New service added. / අලුත් සේවාව එකතු කළා.');
 }
