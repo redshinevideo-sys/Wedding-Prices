@@ -594,7 +594,12 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const PRICING_SUPABASE_URL = 'https://kuzqkdrzvdktmsbfawve.supabase.co';
+const PRICING_SUPABASE_ANON_KEY = 'sb_publishable_9UsU9eBy3g37sC6vWhK6Rg_4Gk0x332';
+let pricingSB = null;
+
 const PRICES = {
   photography: [
     {id:'photo1_6h', name:'1 Photographer • Up to 6 Hours', price:25000, icon:'📸', meta:'One photographer • up to 6 hours.'},
@@ -774,7 +779,19 @@ function applySharedPricingConfig(cfg){
 }
 
 async function loadSharedPricing(){
-  // Admin price settings are shared through the same-origin localStorage snapshot.
+  // 1) Shared cloud pricing: this is the authoritative source for all devices.
+  try{
+    pricingSB = window.supabase?.createClient(PRICING_SUPABASE_URL, PRICING_SUPABASE_ANON_KEY) || null;
+    if(pricingSB){
+      const {data,error}=await pricingSB.from('wedding_pricing_config').select('config,updated_at').eq('id',1).maybeSingle();
+      if(!error && data?.config && applySharedPricingConfig(data.config)){
+        try{ localStorage.setItem('redshinePricingConfig', JSON.stringify(data.config)); }catch(e){}
+        return 'cloud';
+      }
+    }
+  }catch(e){}
+
+  // 2) Local cache fallback (mainly useful if the cloud is temporarily unavailable).
   try{
     const raw=localStorage.getItem('redshinePricingConfig');
     if(raw){
@@ -782,7 +799,8 @@ async function loadSharedPricing(){
       if(applySharedPricingConfig(cfg)) return 'local';
     }
   }catch(e){}
-  // First-time GitHub/static-hosted use: read the committed pricing.json.
+
+  // 3) First-time GitHub/static-hosted fallback: committed pricing.json.
   try{
     const res=await fetch('pricing.json',{cache:'no-store'});
     if(res.ok){

@@ -338,6 +338,16 @@
     .compare,.mini-info{background:#fff;border-color:#ddd;color:#222}
     .summary-col{display:block!important}
   }
+
+  .cloud-sync{margin:0 0 14px;padding:12px;border:1px solid rgba(67,209,139,.2);background:rgba(67,209,139,.05);border-radius:13px}
+  .cloud-sync-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px}
+  .cloud-sync-sub{font-size:10px;color:#9da6b4;margin-top:4px;line-height:1.5}
+  .cloud-dot{width:9px;height:9px;border-radius:999px;background:#7d8795;box-shadow:0 0 0 4px rgba(125,135,149,.10);flex:0 0 auto}
+  .cloud-dot.ok{background:#43d18b;box-shadow:0 0 0 4px rgba(67,209,139,.12)}
+  .cloud-dot.bad{background:#ef233c;box-shadow:0 0 0 4px rgba(239,35,60,.12)}
+  .cloud-login-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:10px}
+  .cloud-login-grid input{min-width:0;background:#0a0e14;color:#fff;border:1px solid #303946;border-radius:10px;padding:10px}
+  @media(max-width:760px){.cloud-login-grid{grid-template-columns:1fr}.cloud-login-grid .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -608,8 +618,22 @@
       <div class="admin-body">
         <div class="admin-note">
           <strong>How it works:</strong> enter your own LKR prices below. Leave a price blank for “Quote / මිල විමසන්න”.
-          New service items and frame sizes can also be added. Prices are stored locally in this browser.
-          Use <strong>Export Pricing</strong> to move your setup to another device.
+          Changes are now saved to <strong>Cloud Pricing</strong> so the public customer builder uses the same prices on phones, laptops and PCs.
+          <br><span style="color:#8f98a7">Your existing Owner Code still protects this admin screen. Cloud saving additionally requires an authenticated Studio Redshine Admin account.</span>
+        </div>
+
+        <div class="cloud-sync" id="cloudSyncBox">
+          <div class="cloud-sync-head">
+            <div>☁️ <strong>Cloud Pricing Sync</strong><div class="cloud-sync-sub" id="cloudSyncStatus">Checking Studio Redshine Admin session…</div></div>
+            <span class="cloud-dot" id="cloudSyncDot"></span>
+          </div>
+          <div id="cloudLoginFields" style="display:none">
+            <div class="cloud-login-grid">
+              <input id="cloudEmail" type="email" autocomplete="username" placeholder="Admin email" />
+              <input id="cloudPassword" type="password" autocomplete="current-password" placeholder="Admin password" />
+              <button class="btn btn-dark" type="button" onclick="connectCloudAdmin()">Connect Admin</button>
+            </div>
+          </div>
         </div>
 
         <div class="admin-toolbar">
@@ -690,7 +714,15 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const PRICING_SUPABASE_URL = 'https://kuzqkdrzvdktmsbfawve.supabase.co';
+const PRICING_SUPABASE_ANON_KEY = 'sb_publishable_9UsU9eBy3g37sC6vWhK6Rg_4Gk0x332';
+let pricingSB = null;
+let cloudAdminReady = false;
+let cloudAdminEmail = '';
+let cloudSaveTimer = null;
+
 const PRICES = {
   photography: [
     {id:'photo1_6h', name:'1 Photographer • Up to 6 Hours', price:25000, icon:'📸', meta:'One photographer • up to 6 hours.'},
@@ -770,6 +802,93 @@ function getPricingSnapshot(){
     translations: JSON.parse(JSON.stringify(SI))
   };
 }
+function setCloudStatus(message, state='neutral'){
+  const text=document.getElementById('cloudSyncStatus');
+  const dot=document.getElementById('cloudSyncDot');
+  if(text) text.textContent=message;
+  if(dot){ dot.classList.remove('ok','bad'); if(state==='ok')dot.classList.add('ok'); if(state==='bad')dot.classList.add('bad'); }
+}
+
+async function initCloudPricingAdmin(){
+  try{
+    pricingSB = window.supabase?.createClient(PRICING_SUPABASE_URL, PRICING_SUPABASE_ANON_KEY) || null;
+    if(!pricingSB){ setCloudStatus('Cloud library unavailable. Local mode only.','bad'); return; }
+    const {data:{session}}=await pricingSB.auth.getSession();
+    if(session){
+      const pr=await pricingSB.from('profiles').select('role,email').eq('id',session.user.id).maybeSingle();
+      if(!pr.error && pr.data?.role==='admin'){
+        cloudAdminReady=true; cloudAdminEmail=session.user.email||pr.data.email||'';
+        setCloudStatus(`Connected as ${cloudAdminEmail} • Cloud prices are enabled.`,'ok');
+        await loadPricingCloud();
+        return;
+      }
+    }
+    document.getElementById('cloudLoginFields').style.display='block';
+    setCloudStatus('Connect your Studio Redshine Admin account to save prices to the cloud.','bad');
+  }catch(e){
+    document.getElementById('cloudLoginFields').style.display='block';
+    setCloudStatus('Cloud connection not ready. You can still use local pricing.','bad');
+  }
+}
+
+async function connectCloudAdmin(){
+  if(!pricingSB) pricingSB=window.supabase?.createClient(PRICING_SUPABASE_URL, PRICING_SUPABASE_ANON_KEY)||null;
+  if(!pricingSB)return adminToast('Cloud library unavailable.',true);
+  const email=document.getElementById('cloudEmail').value.trim();
+  const password=document.getElementById('cloudPassword').value;
+  if(!email||!password)return adminToast('Enter your Admin email and password. / Admin email සහ password දෙන්න.',true);
+  setCloudStatus('Signing in…');
+  const {data,error}=await pricingSB.auth.signInWithPassword({email,password});
+  if(error)return setCloudStatus(error.message,'bad');
+  const pr=await pricingSB.from('profiles').select('role,email').eq('id',data.user.id).maybeSingle();
+  if(pr.error || pr.data?.role!=='admin'){
+    await pricingSB.auth.signOut();
+    return setCloudStatus('This account is not an Administrator.','bad');
+  }
+  cloudAdminReady=true; cloudAdminEmail=data.user.email||pr.data.email||email;
+  document.getElementById('cloudLoginFields').style.display='none';
+  setCloudStatus(`Connected as ${cloudAdminEmail} • Cloud prices are enabled.`,'ok');
+  await loadPricingCloud();
+  adminToast('Cloud pricing connected. / Cloud pricing connect කළා.');
+}
+
+async function loadPricingCloud(){
+  if(!pricingSB)return false;
+  try{
+    const {data,error}=await pricingSB.from('wedding_pricing_config').select('config,updated_at').eq('id',1).maybeSingle();
+    if(error || !data?.config || !data.config.prices)return false;
+    const cfg=data.config;
+    ['photography','videography','special','albums'].forEach(cat=>{
+      if(Array.isArray(cfg.prices[cat])) PRICES[cat]=cfg.prices[cat].map(x=>({...x}));
+    });
+    if(Array.isArray(cfg.frames)) FRAME_SIZES.splice(0,FRAME_SIZES.length,...cfg.frames.map(x=>({...x})));
+    if(cfg.collections)Object.keys(COLLECTIONS).forEach(k=>{if(cfg.collections[k])COLLECTIONS[k].price=normalizePrice(cfg.collections[k].price) ?? COLLECTIONS[k].price;});
+    if(cfg.translations && typeof cfg.translations==='object')Object.keys(cfg.translations).forEach(id=>{if(Array.isArray(cfg.translations[id]))SI[id]=cfg.translations[id];});
+    savePricingLocal(); scheduleCloudSave(); render(); renderAdminPricing();
+    return true;
+  }catch(e){ return false; }
+}
+
+async function savePricingCloud(){
+  if(!cloudAdminReady || !pricingSB){
+    setCloudStatus('Local changes saved, but cloud sync is not connected yet.','bad');
+    return false;
+  }
+  try{
+    const config=getPricingSnapshot();
+    const {error}=await pricingSB.from('wedding_pricing_config').upsert({id:1,config,updated_at:new Date().toISOString()});
+    if(error){ setCloudStatus('Cloud save failed: '+error.message,'bad'); return false; }
+    try{ localStorage.setItem('redshinePricingConfig', JSON.stringify(config)); }catch(e){}
+    setCloudStatus(`Saved to cloud • ${new Date().toLocaleTimeString('en-LK',{hour:'2-digit',minute:'2-digit'})}`,'ok');
+    return true;
+  }catch(e){ setCloudStatus('Cloud save failed.','bad'); return false; }
+}
+
+function scheduleCloudSave(){
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer=setTimeout(()=>savePricingCloud(),250);
+}
+
 function savePricingLocal(){
   try{
     localStorage.setItem('redshinePricingConfig', JSON.stringify(getPricingSnapshot()));
@@ -834,7 +953,7 @@ function importPricing(event){
         });
       }
       SI_REFRESH_FROM_CONFIG();
-      savePricingLocal(); render(); renderAdminPricing();
+      savePricingLocal(); scheduleCloudSave(); render(); renderAdminPricing();
       adminToast('Pricing imported successfully. / Price settings import කළා.');
     }catch(e){
       adminToast('Invalid pricing file. / Price file එක නිවැරදි නැහැ.',true);
@@ -851,7 +970,7 @@ function resetPricingDefaults(){
   });
   FRAME_SIZES.splice(0,FRAME_SIZES.length,...JSON.parse(JSON.stringify(DEFAULT_PRICING.frames)));
   Object.keys(COLLECTIONS).forEach(k=>COLLECTIONS[k].price=DEFAULT_PRICING.collections[k].price);
-  savePricingLocal(); render(); renderAdminPricing();
+  savePricingLocal(); scheduleCloudSave(); render(); renderAdminPricing();
   adminToast('Defaults restored. / Default prices නැවත දාලා.');
 }
 function openPricingAdmin(){
@@ -974,11 +1093,12 @@ function syncAdminPricesFromUI(){
     if(COLLECTIONS[key]) COLLECTIONS[key].price=normalizePrice(input.value) ?? 0;
   });
 }
-function savePricingAdmin(){
+async function savePricingAdmin(){
   syncAdminPricesFromUI();
   savePricingLocal();
   render(); renderAdminPricing();
-  adminToast('Prices saved. / මිල ගණන් save කළා.');
+  const cloudOk=await savePricingCloud();
+  adminToast(cloudOk ? 'Prices saved to cloud. / මිල ගණන් cloud එකට save කළා.' : 'Prices saved on this device. Connect Cloud Admin to sync customers. / මේ device එකේ save වුණා. Customerලාට sync වෙන්න Cloud Admin connect කරන්න.', !cloudOk);
 }
 function addService(){
   const cat=document.getElementById('newServiceCategory').value;
@@ -995,7 +1115,7 @@ function addService(){
     si||en,
     si ? `${si} • Studio Redshine custom service.` : 'Studio Redshine custom service.'
   ];
-  savePricingLocal(); render(); renderAdminPricing();
+  savePricingLocal(); scheduleCloudSave(); render(); renderAdminPricing();
   adminToast('New service added. / අලුත් සේවාව එකතු කළා.');
 }
 function removeService(cat,id){
@@ -1003,7 +1123,7 @@ function removeService(cat,id){
   PRICES[cat]=PRICES[cat].filter(x=>x.id!==id);
   selected.delete(id);
   delete SI[id];
-  savePricingLocal(); render(); renderAdminPricing();
+  savePricingLocal(); scheduleCloudSave(); render(); renderAdminPricing();
 }
 function addFrameSize(){
   const label=document.getElementById('newFrameSize').value.trim();
@@ -1014,7 +1134,7 @@ function addFrameSize(){
   if(!id)id=label.toLowerCase().replace(/[^a-z0-9x]+/g,'x');
   if(FRAME_SIZES.some(f=>f.id===id))return adminToast('That frame size already exists. / මේ Size එක දැනටමත් තියෙනවා.',true);
   FRAME_SIZES.push({id,label,price,si:si||label});
-  savePricingLocal(); render(); renderAdminPricing();
+  savePricingLocal(); scheduleCloudSave(); render(); renderAdminPricing();
   adminToast('Frame size added. / අලුත් Frame Size එක එකතු කළා.');
 }
 function removeFrameSize(id){
@@ -1022,7 +1142,7 @@ function removeFrameSize(id){
   delete frameCart[id];
   const idx=FRAME_SIZES.findIndex(f=>f.id===id);
   if(idx>=0)FRAME_SIZES.splice(idx,1);
-  savePricingLocal(); render(); renderAdminPricing();
+  savePricingLocal(); scheduleCloudSave(); render(); renderAdminPricing();
 }
 function SI_REFRESH_FROM_CONFIG(){
   // Keep existing translations; custom imported items use their own names if translation is unavailable.
@@ -1468,6 +1588,7 @@ document.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('inp
 document.getElementById('frameSize')?.addEventListener('change',updateFrameNote);
 
 loadPricingLocal();
+initCloudPricingAdmin();
 loadFromUrl();
 try{
   const saved=JSON.parse(localStorage.getItem('redshineBuilder')||'null');
